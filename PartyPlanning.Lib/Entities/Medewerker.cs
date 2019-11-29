@@ -16,8 +16,6 @@ namespace PartyPlanning.Lib.Entities
             set { id = value; }
         }
 
-        private static List<int> Ids = new List<int>();
-
         private string naam;
 
         public string Naam
@@ -27,7 +25,7 @@ namespace PartyPlanning.Lib.Entities
             {
                 if (value.Trim().Length < 4)
                 {
-                    throw new Exception("De naam moet minimum 3 tekens lang zijn");
+                    throw new Exception("De naam moet minimum 4 tekens lang zijn");
                 }
                 else
                 {
@@ -74,16 +72,9 @@ namespace PartyPlanning.Lib.Entities
 
         public Medewerker(int id, string naam, DateTime geboortedatum)
         {
-            if (Ids.Contains(id))
-            {
-                throw new Exception("De id is al toegewezen. Deze moet uniek zijn");
-            }
-            else
-            {
-                Ids.Add(id);
-                Naam = naam;
-                GeboorteDatum = geboortedatum;
-            }
+            Id = id;
+            Naam = naam;
+            GeboorteDatum = geboortedatum;
         }
     }
 }

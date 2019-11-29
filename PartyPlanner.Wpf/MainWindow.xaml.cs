@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PartyPlanning.Lib;
+using PartyPlanning.Lib.Entities;
 
 namespace PartyPlanner.Wpf
 {
@@ -22,10 +23,11 @@ namespace PartyPlanner.Wpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        DataView dvMedeWerkers;
+
         const int CnId = 0;
         const int CnMedewerker = 1;
         const int CnGeboortedatum = 2;
+        DataRowView huidigeMedewerker;
 
         public MainWindow()
         {
@@ -35,21 +37,94 @@ namespace PartyPlanner.Wpf
                 Table = MedewerkerBeheer.GeefAlleRecords(),
                 Sort = "Medewerker ASC"
             };
-            dvMedeWerkers = gesorteerdeTabel;
-            
+            MedewerkerBeheer.dvMedeWerkers = gesorteerdeTabel;
+        }
+
+        void KoppelLijsten()
+        {
+            dgMedewerkers.ItemsSource = MedewerkerBeheer.dvMedeWerkers;
+        }
+
+        bool SlaMedewerkerOp()
+        {
+            bool opgeslagen = true;
+            try
+            {
+                int id = huidigeMedewerker == null ?
+                    MedewerkerBeheer.GeefNieuwId() :
+                    (int)huidigeMedewerker[CnId];
+
+                string naam = txtNaam.Text;
+                DateTime? geboorteDatum = dtpGeboortedatum.SelectedDate;
+                Medewerker medewerker = new Medewerker(id, naam, (DateTime)geboorteDatum);
+                MedewerkerBeheer.SlaOp(medewerker);
+                ToonMelding($"{medewerker.Naam} is opgeslagen", true);
+                WisMedewerkerInput();
+            }
+            catch (Exception ex)
+            {
+                ToonMelding(ex.Message);
+                opgeslagen = false;
+            }
+            return opgeslagen;
+        }
+
+        void WisMedewerkerInput()
+        {
+            txtNaam.Clear();
+            dtpGeboortedatum.SelectedDate = null;
+            dgMedewerkers.SelectedIndex = -1;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            dgMedewerkers.ItemsSource = dvMedeWerkers;
 
+            KoppelLijsten();
         }
 
         private void dgMedewerkers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DataRowView medewerker = (DataRowView)dgMedewerkers.SelectedItem;
-            txtNaam.Text = medewerker[CnMedewerker].ToString();
-            dtpGeboortedatum.SelectedDate = (DateTime)medewerker[CnGeboortedatum];
+            huidigeMedewerker = (DataRowView)dgMedewerkers.SelectedItem;
+            if (huidigeMedewerker == null)
+            {
+                WisMedewerkerInput();
+            }
+            else
+            {
+                txtNaam.Text = huidigeMedewerker[CnMedewerker].ToString();
+                dtpGeboortedatum.SelectedDate = (DateTime)huidigeMedewerker[CnGeboortedatum];
+            }
+        }
+
+        private void btnNieuw_Click(object sender, RoutedEventArgs e)
+        {
+            WisMedewerkerInput();
+            txtNaam.Focus();
+        }
+
+        private void btnSlaOp_Click(object sender, RoutedEventArgs e)
+        {
+            if (SlaMedewerkerOp()) WisMedewerkerInput();
+        }
+
+        private void btnVerwijder_Click(object sender, RoutedEventArgs e)
+        {
+            string naamMedewerker = "";
+            try
+            {
+                int index = dgMedewerkers.SelectedIndex;
+                naamMedewerker = huidigeMedewerker[CnMedewerker].ToString();
+                MedewerkerBeheer.VerwijderRecord((int)huidigeMedewerker[CnId]);
+                MedewerkerBeheer.dvMedeWerkers.Delete(index);
+                ToonMelding($"{naamMedewerker} is verwijderd", true);
+                WisMedewerkerInput();
+            }
+            catch (Exception ex)
+            {
+
+                ToonMelding($"{naamMedewerker} is niet verwijderd\n{ex.Message}");
+            }
+
         }
     }
 }

@@ -31,6 +31,7 @@ namespace PartyPlanning.Lib
 
         public static bool ExecuteCommand(string sqlInstructie, string dbNaam = "Party")
         {
+            bool opgeslagen = true;
             string constring = ConfigurationManager.ConnectionStrings[dbNaam].ToString();
             SqlConnection mijnVerbinding = new SqlConnection(constring);
             SqlCommand mijnOpdracht = new SqlCommand(sqlInstructie, mijnVerbinding);
@@ -39,13 +40,12 @@ namespace PartyPlanning.Lib
                 mijnOpdracht.Connection.Open();
                 mijnOpdracht.ExecuteNonQuery();
                 mijnVerbinding.Close();
-                return true;
             }
-            catch (Exception fout)
+            catch (Exception ex)
             {
-                //string foutmelding = fout.Message;
-                return false;
+                throw new Exception("Opslaan mislukt\n" + ex.Message);
             }
+            return opgeslagen;
         }
 
     }
