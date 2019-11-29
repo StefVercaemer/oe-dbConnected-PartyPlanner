@@ -28,21 +28,26 @@ namespace PartyPlanner.Wpf
         const int CnMedewerker = 1;
         const int CnGeboortedatum = 2;
         DataRowView huidigeMedewerker;
+        TaakBeheer taakBeheer = new TaakBeheer();
 
         public MainWindow()
         {
             InitializeComponent();
-            DataView gesorteerdeTabel = new DataView
-            {
-                Table = MedewerkerBeheer.GeefAlleRecords(),
-                Sort = "Medewerker ASC"
-            };
-            MedewerkerBeheer.dvMedeWerkers = gesorteerdeTabel;
         }
 
-        void KoppelLijsten()
+        void KoppelLijstMedewerkers()
         {
+            MedewerkerBeheer.LaadDvMedeWerkers();
             dgMedewerkers.ItemsSource = MedewerkerBeheer.dvMedeWerkers;
+        }
+
+        void KoppelLijstenTaken()
+        {
+            taakBeheer.LaadDvTaken();
+            lstTaken.ItemsSource = taakBeheer.Taken;
+            lstTaken.Items.Refresh();
+            cmbTaak.ItemsSource = taakBeheer.Taken;
+            
         }
 
         bool SlaMedewerkerOp()
@@ -78,8 +83,10 @@ namespace PartyPlanner.Wpf
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
-            KoppelLijsten();
+            btnVerwijder.IsEnabled = false;
+            KoppelLijstMedewerkers();
+            KoppelLijstenTaken();
+            tbkFeedBack.Visibility = Visibility.Hidden;
         }
 
         private void dgMedewerkers_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -88,11 +95,14 @@ namespace PartyPlanner.Wpf
             if (huidigeMedewerker == null)
             {
                 WisMedewerkerInput();
+                btnVerwijder.IsEnabled = false;
             }
             else
             {
                 txtNaam.Text = huidigeMedewerker[CnMedewerker].ToString();
                 dtpGeboortedatum.SelectedDate = (DateTime)huidigeMedewerker[CnGeboortedatum];
+                btnVerwijder.IsEnabled = true;
+                tbkFeedBack.Visibility = Visibility.Hidden;
             }
         }
 
@@ -104,7 +114,11 @@ namespace PartyPlanner.Wpf
 
         private void btnSlaOp_Click(object sender, RoutedEventArgs e)
         {
-            if (SlaMedewerkerOp()) WisMedewerkerInput();
+            if (SlaMedewerkerOp())
+            {
+                WisMedewerkerInput();
+                KoppelLijstMedewerkers();
+            }
         }
 
         private void btnVerwijder_Click(object sender, RoutedEventArgs e)
@@ -118,11 +132,29 @@ namespace PartyPlanner.Wpf
                 MedewerkerBeheer.dvMedeWerkers.Delete(index);
                 ToonMelding($"{naamMedewerker} is verwijderd", true);
                 WisMedewerkerInput();
+                KoppelLijstMedewerkers();
             }
             catch (Exception ex)
             {
 
                 ToonMelding($"{naamMedewerker} is niet verwijderd\n{ex.Message}");
+            }
+
+        }
+
+        private void btnTaakToevoegen_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string taaknaam = txtTaak.Text;
+                taakBeheer.VoegRecordToe(taaknaam);
+                KoppelLijstenTaken();
+                txtTaak.Clear();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Taak niet opgeslagen\n{ex.Message}");
             }
 
         }

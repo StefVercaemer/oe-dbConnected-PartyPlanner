@@ -17,6 +17,16 @@ namespace PartyPlanning.Lib
 
         public static DataView dvMedeWerkers;
 
+        public static void LaadDvMedeWerkers()
+        {
+            DataView gesorteerdeTabel = new DataView
+            {
+                Table = MedewerkerBeheer.GeefAlleRecords(),
+                Sort = "Medewerker ASC"
+            };
+            MedewerkerBeheer.dvMedeWerkers = gesorteerdeTabel;
+        }
+
         public static DataTable GeefAlleRecords()
         {
             string sql;

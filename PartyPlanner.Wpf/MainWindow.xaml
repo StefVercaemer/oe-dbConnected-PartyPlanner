@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PartyPlanner.Wpf"
         mc:Ignorable="d"
-        Title="Party planner" Height="423.882" Width="881.176" Loaded="Window_Loaded">
+        Title="Party planner" Height="423.882" Width="969.176" Loaded="Window_Loaded">
     <Grid>
-        <DataGrid x:Name="dgMedewerkers" HorizontalAlignment="Left" Height="209" Margin="10,21,0,0" VerticalAlignment="Top" Width="305" SelectionChanged="dgMedewerkers_SelectionChanged"/>
+        <DataGrid x:Name="dgMedewerkers" HorizontalAlignment="Left" Height="209" Margin="10,41,0,0" VerticalAlignment="Top" Width="305" SelectionChanged="dgMedewerkers_SelectionChanged"/>
         <Label Content="Medewerker" HorizontalAlignment="Left" Margin="334,53,0,0" VerticalAlignment="Top" Width="91"/>
         <Label Content="Geboortedatum" HorizontalAlignment="Left" Margin="334,84,0,0" VerticalAlignment="Top" Width="102"/>
         <TextBox x:Name="txtNaam" HorizontalAlignment="Left" Height="23" Margin="456,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
@@ -16,5 +16,16 @@
         <Button x:Name="btnSlaOp" Content="Sla Op" HorizontalAlignment="Left" Margin="418,134,0,0" VerticalAlignment="Top" Width="75" Click="btnSlaOp_Click"/>
         <Button x:Name="btnVerwijder" Content="Verwijder" HorizontalAlignment="Left" Margin="501,134,0,0" VerticalAlignment="Top" Width="75" Click="btnVerwijder_Click"/>
         <TextBlock x:Name="tbkFeedBack" Padding="10" Foreground="White" HorizontalAlignment="Left" Margin="10,244,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="92" Width="305"/>
+        <ListBox x:Name="lstTaken" HorizontalAlignment="Left" Height="105" Margin="334,231,0,0" VerticalAlignment="Top" Width="111"/>
+        <TextBox x:Name="txtTaak" HorizontalAlignment="Left" Height="23" Margin="335,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"/>
+        <Button x:Name="btnTaakToevoegen" Content="+" HorizontalAlignment="Left" Margin="456,201,0,0" VerticalAlignment="Top" Width="23" Height="23" Click="btnTaakToevoegen_Click"/>
+        <Label Content="Taken" HorizontalAlignment="Left" Margin="335,175,0,0" VerticalAlignment="Top" Width="110"/>
+        <ComboBox x:Name="cmbTaak" HorizontalAlignment="Left" Margin="740,41,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Taken" HorizontalAlignment="Left" Margin="593,5,0,0" VerticalAlignment="Top" Width="120"/>
+        <ListBox x:Name="lstUur" HorizontalAlignment="Left" Height="100" Margin="740,70,0,0" VerticalAlignment="Top" Width="120"/>
+        <ListBox x:Name="lstTakenLijst" HorizontalAlignment="Left" Height="215" Margin="593,41,0,0" VerticalAlignment="Top" Width="142"/>
+        <TextBox x:Name="txtOpmerking" HorizontalAlignment="Left" Height="81" Margin="740,175,0,0" TextWrapping="Wrap" Text="Opmerking&#xD;&#xA;" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Taken" HorizontalAlignment="Left" Margin="593,5,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Medewerkers" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>

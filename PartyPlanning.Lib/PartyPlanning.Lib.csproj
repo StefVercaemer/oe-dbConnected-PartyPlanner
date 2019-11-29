@@ -44,10 +44,14 @@
   <ItemGroup>
     <Compile Include="DBConnector.cs" />
     <Compile Include="Entities\Medewerker.cs" />
+    <Compile Include="Entities\Shift.cs" />
+    <Compile Include="Entities\Taak.cs" />
     <Compile Include="Enumeraties.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MedewerkerBeheer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShiftBeheer.cs" />
+    <Compile Include="TaakBeheer.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -23,8 +23,7 @@ namespace PartyPlanning.Lib
             }
             catch (Exception fout)
             {
-                //string foutmelding = fout.Message;
-                return null;
+                throw new Exception(fout.Message);
             }
             return ds.Tables[0];
         }
