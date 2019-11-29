@@ -12,5 +12,10 @@ namespace PartyPlanning.Lib
         {
             return waarde.Trim().Replace("'", "''");
         }
+
+        public static string DatumInSqlNotatie(DateTime datum)
+        {
+            return $"'{datum.Year}-{datum.Month}-{datum.Day}'";
+        }
     }
 }

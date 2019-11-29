@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PartyPlanning.Lib.Entities;
 
 namespace PartyPlanning.Lib
 {
@@ -12,6 +13,7 @@ namespace PartyPlanning.Lib
         const string TabelNaam = "Medewerker";
         const string IdNaam = "Id";
         const string OmschrijvingsVeldNaam = "Medewerker";
+        const string GeboortedatumVeldNaam = "Geboortedatum";
 
         public static DataTable GeefAlleRecords()
         {
@@ -54,24 +56,31 @@ namespace PartyPlanning.Lib
                 return null;
         }
 
-        public static bool VoegRecordToe(string naam, bool autoNummering = true)
+        public static bool VoegRecordToe(string naam, DateTime geboorteDatum, int? id = null)
         {
             string sql;
+            int medewerkerId;
             naam = Helper.HandleQuotes(naam);
-            if (naam.Length == 0)
-                return false;
 
-            if (!autoNummering)
+            if (id == null)
             {
                 sql = $"select max({IdNaam}) from {TabelNaam}";
-                int nieuwe_id = int.Parse(DBConnector.ExecuteSelect(sql).Rows[0][0].ToString()) + 1;
-                sql = $"insert into {TabelNaam} ({IdNaam}, naam) values ({nieuwe_id},'{naam}')";
+                medewerkerId = int.Parse(DBConnector.ExecuteSelect(sql).Rows[0][0].ToString()) + 1;
             }
             else
             {
-                sql = $"insert into {TabelNaam} ({OmschrijvingsVeldNaam}) values ('{naam}')";
+                medewerkerId = (int)id;
             }
-
+            try
+            {
+                Medewerker medewerker = new Medewerker(medewerkerId, naam, geboorteDatum);
+                sql = $"insert into {TabelNaam} ({IdNaam},{OmschrijvingsVeldNaam},{GeboortedatumVeldNaam}) values " +
+                                              $"({IdNaam},'{naam}',{Helper.DatumInSqlNotatie(geboorteDatum)})";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
             return DBConnector.ExecuteCommand(sql);
         }
 

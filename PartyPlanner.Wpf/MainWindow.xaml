@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PartyPlanner.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Party planner" Height="423.882" Width="881.176" Loaded="Window_Loaded">
     <Grid>
-        
+        <DataGrid x:Name="dgMedewerkers" HorizontalAlignment="Left" Height="209" Margin="10,21,0,0" VerticalAlignment="Top" Width="305" SelectionChanged="dgMedewerkers_SelectionChanged"/>
+        <Label Content="Medewerker" HorizontalAlignment="Left" Margin="334,53,0,0" VerticalAlignment="Top" Width="91"/>
+        <Label Content="Geboortedatum" HorizontalAlignment="Left" Margin="334,84,0,0" VerticalAlignment="Top" Width="102"/>
+        <TextBox x:Name="txtNaam" HorizontalAlignment="Left" Height="23" Margin="456,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <DatePicker x:Name="dtpGeboortedatum" HorizontalAlignment="Left" Margin="456,86,0,0" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>
