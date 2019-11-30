@@ -11,20 +11,52 @@ namespace PartyPlanning.Lib
     public class MedewerkerBeheer
     {
         const string TabelNaam = "Medewerker";
-        const string IdNaam = "Id";
-        const string OmschrijvingsVeldNaam = "Medewerker";
-        const string GeboortedatumVeldNaam = "Geboortedatum";
+        const string CnId = "Id";
+        const string CnOmschrijving = "Medewerker";
+        const string CnGeboortedatum= "Geboortedatum";
 
-        public static DataView dvMedeWerkers;
+        public static DataView DvMedeWerkers { get; set; }
+
+        public static List<Medewerker> Medewerkers { get; set; }
+
+        public static List<string> NamenLijst
+        {
+            get
+            {
+                List<string> namenLijst = new List<string>();
+                foreach (DataRowView drMedewerker in DvMedeWerkers)
+                {
+                    namenLijst.Add(drMedewerker[CnOmschrijving].ToString());
+                    namenLijst.Sort();
+                }
+                return namenLijst;
+            } 
+            //set; 
+        }
+
+
 
         public static void LaadDvMedeWerkers()
         {
+            Medewerkers = new List<Medewerker>();
             DataView gesorteerdeTabel = new DataView
             {
-                Table = MedewerkerBeheer.GeefAlleRecords(),
+                Table = GeefAlleRecords(),
                 Sort = "Medewerker ASC"
             };
-            MedewerkerBeheer.dvMedeWerkers = gesorteerdeTabel;
+            DvMedeWerkers = gesorteerdeTabel;
+
+            foreach (DataRow  drMedewerker in GeefAlleRecords().Rows)
+            {
+                Medewerker medewerker = new Medewerker
+                    (
+                        (int)drMedewerker[CnId],
+                        drMedewerker[CnOmschrijving].ToString(),
+                        (DateTime)drMedewerker[CnGeboortedatum]
+                    );
+                Medewerkers.Add(medewerker);
+            }
+
         }
 
         public static DataTable GeefAlleRecords()
@@ -45,7 +77,7 @@ namespace PartyPlanning.Lib
         public static string GeefVeldInfo(int id, string veldnaam)
         {
             string sql;
-            sql = $"select * from {TabelNaam} where {IdNaam} = " + id.ToString();
+            sql = $"select * from {TabelNaam} where {CnId} = " + id.ToString();
             DataTable tabel = DBConnector.ExecuteSelect(sql);
             if (tabel.Rows.Count > 0)
             {
@@ -58,7 +90,7 @@ namespace PartyPlanning.Lib
         public static DataRow GeefRecord(int id)
         {
             string sql;
-            sql = $"select * from {TabelNaam} where {IdNaam} = " + id.ToString();
+            sql = $"select * from {TabelNaam} where {CnId} = " + id.ToString();
             DataTable tabel = DBConnector.ExecuteSelect(sql);
             if (tabel.Rows.Count > 0)
             {
@@ -68,10 +100,20 @@ namespace PartyPlanning.Lib
                 return null;
         }
 
+        public static Medewerker GeefMedewerkerObject(int id)
+        {
+            DataRow record = GeefRecord(id);
+            Medewerker medewerker = new Medewerker
+            (id, record[CnOmschrijving].ToString(), (DateTime)record[CnGeboortedatum]
+
+            );
+            return medewerker;
+        }
+
         public static int GeefNieuwId()
         {
             string sql;
-            sql = $"select max({IdNaam}) from {TabelNaam}";
+            sql = $"select max({CnId}) from {TabelNaam}";
             return int.Parse(DBConnector.ExecuteSelect(sql).Rows[0][0].ToString()) + 1;
         }
 
@@ -87,15 +129,15 @@ namespace PartyPlanning.Lib
                 bool nieuwRecord = GeefRecord(medewerkerId) == null ? true : false;
                 if (nieuwRecord)
                 {
-                    sql = $"insert into {TabelNaam} ({OmschrijvingsVeldNaam},{GeboortedatumVeldNaam}) values " +
+                    sql = $"insert into {TabelNaam} ({CnOmschrijving},{CnGeboortedatum}) values " +
                                                   $"('{naam}',{Helper.DatumInSqlNotatie(geboorteDatum)})";
                 }
                 else
                 {
                     sql = $"update {TabelNaam} set " +
-                        $"{OmschrijvingsVeldNaam} = '{naam}', " +
-                        $"{GeboortedatumVeldNaam} = {Helper.DatumInSqlNotatie(medewerker.GeboorteDatum)} " +
-                        $"where {IdNaam} = {medewerkerId}";
+                        $"{CnOmschrijving} = '{naam}', " +
+                        $"{CnGeboortedatum} = {Helper.DatumInSqlNotatie(medewerker.GeboorteDatum)} " +
+                        $"where {CnId} = {medewerkerId}";
                 }
             }
             catch (Exception ex)
@@ -107,12 +149,7 @@ namespace PartyPlanning.Lib
 
         public static bool VerwijderRecord(int id)
         {
-            string sql;
-            //sql = $"select count(*) from Rooster where medewerker_id = {id}";
-            //if ((int)DBConnector.ExecuteSelect(sql).Rows[0][0] != 0)
-            //    throw new Exception("Er zijn nog taken toegewezen aan deze medewerker");
-
-            sql = $"delete from {TabelNaam} where {IdNaam} = {id}";
+             string sql = $"delete from {TabelNaam} where {CnId} = {id}";
             return DBConnector.ExecuteCommand(sql);
         }
 

@@ -15,9 +15,9 @@ namespace PartyPlanning.Lib
         const string CnId = "Id";
         const string CnTaak = "Taak";
 
-        public List<Taak> Taken { get; private set; }
+        public static List<Taak> Taken { get; private set; }
 
-        public void LaadDvTaken()
+        public static void LaadDvTaken()
         {
             Taken = new List<Taak>();
             DataTable taken;
@@ -38,7 +38,7 @@ namespace PartyPlanning.Lib
             }
         }
 
-        public bool VoegRecordToe(string naam)
+        public static bool VoegRecordToe(string naam)
         {
             string sql;
             try
@@ -54,5 +54,30 @@ namespace PartyPlanning.Lib
             }
             return DBConnector.ExecuteCommand(sql); ;
         }
+
+        public static DataRow GeefRecord(int id)
+        {
+            string sql;
+            sql = $"select * from {TabelNaam} where {CnId} = " + id.ToString();
+            DataTable tabel = DBConnector.ExecuteSelect(sql);
+            if (tabel.Rows.Count > 0)
+            {
+                return tabel.Rows[0];
+            }
+            else
+                return null;
+        }
+
+        public static Taak GeefTaakObject(int id)
+        {
+            DataRow record = GeefRecord(id);
+            Taak taak = new Taak
+            {
+                Id = id,
+                Naam = record[CnTaak].ToString()
+            };
+            return taak;
+        }
+
     }
 }

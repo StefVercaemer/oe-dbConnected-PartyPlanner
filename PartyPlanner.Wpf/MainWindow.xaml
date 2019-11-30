@@ -20,12 +20,16 @@
         <TextBox x:Name="txtTaak" HorizontalAlignment="Left" Height="23" Margin="335,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"/>
         <Button x:Name="btnTaakToevoegen" Content="+" HorizontalAlignment="Left" Margin="456,201,0,0" VerticalAlignment="Top" Width="23" Height="23" Click="btnTaakToevoegen_Click"/>
         <Label Content="Taken" HorizontalAlignment="Left" Margin="335,175,0,0" VerticalAlignment="Top" Width="110"/>
-        <ComboBox x:Name="cmbTaak" HorizontalAlignment="Left" Margin="740,41,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="cmbTaak" HorizontalAlignment="Left" Margin="781,41,0,0" VerticalAlignment="Top" Width="120"/>
         <Label Content="Taken" HorizontalAlignment="Left" Margin="593,5,0,0" VerticalAlignment="Top" Width="120"/>
-        <ListBox x:Name="lstUur" HorizontalAlignment="Left" Height="100" Margin="740,70,0,0" VerticalAlignment="Top" Width="120"/>
-        <ListBox x:Name="lstTakenLijst" HorizontalAlignment="Left" Height="215" Margin="593,41,0,0" VerticalAlignment="Top" Width="142"/>
-        <TextBox x:Name="txtOpmerking" HorizontalAlignment="Left" Height="81" Margin="740,175,0,0" TextWrapping="Wrap" Text="Opmerking&#xD;&#xA;" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Taken" HorizontalAlignment="Left" Margin="593,5,0,0" VerticalAlignment="Top" Width="120"/>
+        <ListBox x:Name="lstUur" HorizontalAlignment="Left" Height="74" Margin="781,96,0,0" VerticalAlignment="Top" Width="120"/>
+        <ListBox x:Name="lstShifts" HorizontalAlignment="Left" Height="215" Margin="593,41,0,0" VerticalAlignment="Top" Width="183" SelectionChanged="lstShifts_SelectionChanged"/>
+        <TextBox x:Name="txtOpmerking" HorizontalAlignment="Left" Height="81" Margin="781,175,0,0" TextWrapping="Wrap" Text="Opmerking&#xD;&#xA;" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Taken" HorizontalAlignment="Left" Margin="593,5,0,0" VerticalAlignment="Top" Width="42"/>
         <Label Content="Medewerkers" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="cmbMedewerker" HorizontalAlignment="Left" Margin="781,68,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btnShiftToevoegen" Content="+" HorizontalAlignment="Left" Margin="640,7,0,0" VerticalAlignment="Top" Width="23" Height="23" Click="btnShiftToevoegen_Click"/>
+        <Button x:Name="btnSlaShiftOp" Content="Sla Op" HorizontalAlignment="Left" Margin="781,261,0,0" VerticalAlignment="Top" Width="120" Height="32" Foreground="#FFFBF8F8" Background="#FF2FA823" Click="btnSlaShiftOp_Click"/>
+        <Button x:Name="btnVerwijderShift" Content="Verwijder" HorizontalAlignment="Left" Margin="593,261,0,0" VerticalAlignment="Top" Width="183" Background="#FFF91111" Foreground="#FFFDFDFD" Height="32" Click="btnVerwijderShift_Click"/>
     </Grid>
 </Window>

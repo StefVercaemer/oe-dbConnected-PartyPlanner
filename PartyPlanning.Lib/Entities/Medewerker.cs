@@ -76,5 +76,10 @@ namespace PartyPlanning.Lib.Entities
             Naam = naam;
             GeboorteDatum = geboortedatum;
         }
+
+        public override string ToString()
+        {
+            return $"{Naam}";
+        }
     }
 }
